@@ -1,83 +1,288 @@
-// ============================================
-// Solana AI City - Main Components Export
-// ============================================
+/**
+ * Solana AI City - All UI Components Index
+ * 完整UI组件索引
+ */
 
-// Core Game Components
-export { ResourcePanel } from './ResourcePanel';
-export { BuildingMenu } from './BuildingMenu';
-export { GameMap } from './GameMap';
-export { PlayerProfile } from './PlayerProfile';
-export { Leaderboard } from './Leaderboard';
-export { SettingsPanel } from './SettingsPanel';
-export { TutorialOverlay } from './TutorialOverlay';
-export { AISuggestionPanel } from './AISuggestionPanel';
+// ===============================
+// Core UI Components
+// ===============================
 
-// Blockchain Components
-export { WalletConnect } from './WalletConnect';
-export { TokenGate } from './TokenGate';
-export { AchievementNFT } from './AchievementNFT';
-export { BlockchainPanel } from './BlockchainPanel';
+export { default as ResourcePanel } from './ResourcePanel';
+export { default as GachaComponents } from './GachaComponents';
 
-// Social & Quest Components
-export { ChatRoom, TradeOfferCard, NotificationCenter, FriendList, QuickChat } from './ChatSystem';
-export { QuestPanel, QuestCard, QuestResetTimer } from './QuestSystem';
+// ===============================
+// Guild UI Components
+// ===============================
 
-// Shop Components
-export { ShopPanel, SubscriptionCard, DailyFreeRewards } from './ShopSystem';
+export { default as GuildPanel } from './GuildPanel';
+export { default as GuildWarUI } from './GuildWarUI';
+export { default as GuildMemberList } from './GuildMemberList';
+export { default as GuildShopUI } from './GuildShopUI';
 
-// Layout Components
-export { GameLayout } from './GameLayout';
-export { Header } from './Header';
-export { Footer } from './Footer';
-export { Modal } from './Modal';
-export { LoadingScreen } from './LoadingScreen';
+// ===============================
+// Arena UI Components
+// ===============================
 
-// UI Components
-export { Button, ButtonGroup } from './ui/Button';
-export { Card } from './ui/Card';
-export { Badge } from './ui/Badge';
-export { ProgressBar } from './ui/ProgressBar';
-export { Input, TextArea, Select } from './ui/Input';
-export { Tooltip } from './ui/Tooltip';
-export { Tab, Tabs } from './ui/Tabs';
-export { Dropdown } from './ui/Dropdown';
-export { Alert } from './ui/Alert';
-export { Toast, ToastContainer, useToast } from './ui/Toast';
-export { Spinner } from './ui/Spinner';
-export { EmptyState } from './ui/EmptyState';
-export { Avatar } from './ui/Avatar';
-export { Icon } from './ui/Icon';
+export { default as ArenaLobby } from './ArenaLobby';
+export { default as ArenaBattle } from './ArenaBattle';
+export { default as ArenaLeaderboard } from './ArenaLeaderboard';
+export { default as ArenaMatchmaking } from './ArenaMatchmaking';
 
-// ============================================
-// Re-export Types
-// ============================================
+// ===============================
+// Quest UI Components
+// ===============================
 
-export type {
-  GameResources,
-  ResourceRates,
-  BuildingType,
-  Building,
-  BuildingStats,
-  Achievement,
-  AchievementRarity,
-  Player,
-  PlayerStats,
-  Quest,
-  QuestStatus,
-  ShopItem,
-  ShopCategory,
-  TradeOffer,
-  ChatMessage,
-  Notification,
-  Friend,
-} from '../types';
+export { default as QuestPanel } from './QuestPanel';
+export { default as DailyQuests } from './DailyQuests';
+export { default as WeeklyQuests } from './WeeklyQuests';
+export { default as AchievementPanel } from './AchievementPanel';
+export { default as QuestRewards } from './QuestRewards';
 
-// ============================================
-// Version Info
-// ============================================
+// ===============================
+// Market UI Components
+// ===============================
 
-export const VERSION = '1.0.0';
-export const BUILD_DATE = new Date().toISOString();
+export { default as Marketplace } from './Marketplace';
+export { default as NFTListing } from './NFTListing';
+export { default as AuctionPanel } from './AuctionPanel';
+export { default as CurrencyExchange } from './CurrencyExchange';
+export { default as OrderBook } from './OrderBook';
 
-console.log(`🏙️ Solana AI City v${VERSION} loaded`);
-console.log(`📦 ${process.env.VITE_APP_VERSION || 'Production Build'}`);
+// ===============================
+// Leaderboard UI Components
+// ===============================
+
+export { default as LeaderboardPanel } from './LeaderboardPanel';
+export { default as SeasonRanking } from './SeasonRanking';
+export { default as RankBadge } from './RankBadge';
+export { default as SeasonProgress } from './SeasonProgress';
+
+// ===============================
+// Social UI Components
+// ===============================
+
+export { default as FriendList } from './FriendList';
+export { default as ChatPanel } from './ChatPanel';
+export { default as FriendRequests } from './FriendRequests';
+export { default as InvitePanel } from './InvitePanel';
+export { default as OnlineStatus } from './OnlineStatus';
+
+// ===============================
+// AI Assistant UI Components
+// ===============================
+
+export { default as AIChatWidget } from './AIChatWidget';
+export { default as AISuggestions } from './AISuggestions';
+export { default as AITutorial } from './AITutorial';
+export { default as AINotifications } from './AINotifications';
+export { default as CityBotAvatar } from './CityBotAvatar';
+
+// ===============================
+// Events UI Components
+// ===============================
+
+export { default as EventCalendar } from './EventCalendar';
+export { default as LoginBonus } from './LoginBonus';
+export { default as ActiveEvents } from './ActiveEvents';
+export { default as HolidayBanner } from './HolidayBanner';
+export { default as EventRewards } from './EventRewards';
+
+// ===============================
+// Component Usage Examples
+// ===============================
+
+/*
+// Main App Integration
+import { 
+  ResourcePanel, 
+  QuestPanel, 
+  ArenaLobby,
+  Marketplace,
+  LeaderboardPanel,
+  FriendList,
+  AIChatWidget,
+  LoginBonus 
+} from './components';
+
+function App() {
+  return (
+    <div className="app">
+      <ResourcePanel />
+      <QuestPanel />
+      <ArenaLobby />
+      <Marketplace />
+      <LeaderboardPanel />
+      <FriendList />
+      <AIChatWidget />
+      <LoginBonus />
+    </div>
+  );
+}
+
+// Modal/Page Navigation
+function openGuild() {
+  showModal(<GuildPanel />);
+}
+
+function openArena() {
+  navigate('/arena', <ArenaLobby />);
+}
+
+function openMarket() {
+  navigate('/market', <Marketplace />);
+}
+*/
+
+// ===============================
+// UI Design System
+// ===============================
+
+export const UI_THEME = {
+  colors: {
+    primary: 'from-purple-500 to-pink-500',
+    secondary: 'from-blue-500 to-cyan-500',
+    success: 'from-green-500 to-emerald-500',
+    warning: 'from-yellow-500 to-orange-500',
+    danger: 'from-red-500 to-rose-500',
+    gold: 'from-yellow-400 to-yellow-600',
+    energy: 'from-orange-400 to-red-500',
+    rare: 'from-blue-400 to-blue-600',
+    epic: 'from-purple-400 to-purple-600',
+    legendary: 'from-yellow-400 to-orange-500',
+    mythic: 'from-pink-500 to-red-500',
+  },
+  
+  gradients: {
+    card: 'bg-gradient-to-br from-white/10 to-white/5',
+    button: 'bg-gradient-to-r from-purple-500 to-pink-500',
+    header: 'bg-gradient-to-r from-purple-600 to-pink-600',
+  },
+  
+  spacing: {
+    sm: 'p-2',
+    md: 'p-4',
+    lg: 'p-6',
+    xl: 'p-8',
+  },
+  
+  rounded: {
+    sm: 'rounded-lg',
+    md: 'rounded-xl',
+    lg: 'rounded-2xl',
+    full: 'rounded-full',
+  },
+};
+
+// ===============================
+// Common Icons
+// ===============================
+
+export const UI_ICONS = {
+  energy: '⚡',
+  gold: '🪙',
+  usdc: '💎',
+  reputation: '🏆',
+  quest: '📋',
+  battle: '⚔️',
+  guild: '🏰',
+  market: '🛒',
+  social: '👥',
+  ai: '🤖',
+  event: '🎉',
+  settings: '⚙️',
+  close: '✕',
+  back: '←',
+  forward: '→',
+  expand: '⤢',
+  collapse: '⤡',
+};
+
+// ===============================
+// Animation Presets
+// ===============================
+
+export const UI_ANIMATIONS = {
+  fadeIn: 'animate-fade-in',
+  slideUp: 'animate-slide-up',
+  slideDown: 'animate-slide-down',
+  pulse: 'animate-pulse',
+  bounce: 'animate-bounce',
+  spin: 'animate-spin',
+  shake: 'animate-shake',
+  glow: 'animate-glow',
+};
+
+export const ANIMATION_DURATION = {
+  fast: '150ms',
+  normal: '300ms',
+  slow: '500ms',
+  verySlow: '1000ms',
+};
+
+// ===============================
+// Export All
+// ===============================
+
+export default {
+  // Core
+  ResourcePanel,
+  GachaComponents,
+  
+  // Guild
+  GuildPanel,
+  GuildWarUI,
+  GuildMemberList,
+  GuildShopUI,
+  
+  // Arena
+  ArenaLobby,
+  ArenaBattle,
+  ArenaLeaderboard,
+  ArenaMatchmaking,
+  
+  // Quest
+  QuestPanel,
+  DailyQuests,
+  WeeklyQuests,
+  AchievementPanel,
+  QuestRewards,
+  
+  // Market
+  Marketplace,
+  NFTListing,
+  AuctionPanel,
+  CurrencyExchange,
+  OrderBook,
+  
+  // Leaderboard
+  LeaderboardPanel,
+  SeasonRanking,
+  RankBadge,
+  SeasonProgress,
+  
+  // Social
+  FriendList,
+  ChatPanel,
+  FriendRequests,
+  InvitePanel,
+  OnlineStatus,
+  
+  // AI
+  AIChatWidget,
+  AISuggestions,
+  AITutorial,
+  AINotifications,
+  CityBotAvatar,
+  
+  // Events
+  EventCalendar,
+  LoginBonus,
+  ActiveEvents,
+  HolidayBanner,
+  EventRewards,
+  
+  // System
+  UI_THEME,
+  UI_ICONS,
+  UI_ANIMATIONS,
+};
