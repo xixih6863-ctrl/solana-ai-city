@@ -1,0 +1,7 @@
+title: Solana AI City
+description: AI-powered Web3 city building game on Solana
+theme: minima
+plugins:
+  - jekyll-remote-theme
+  
+remote_theme: jekyll/minima

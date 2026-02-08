@@ -1,0 +1,381 @@
+/**
+ * Solana AI City - Frontend
+ * 
+ * React-based game interface
+ */
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { Connection, PublicKey, SystemProgram, Keypair } from '@solana/web3.js';
+import { Program, AnchorProvider, Wallet } from '@coral-xyz/anchor';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import GameMap from './components/GameMap';
+import CityPanel from './components/CityPanel';
+import ResourceBar from './components/ResourceBar';
+import BuildingMenu from './components/BuildingMenu';
+import AIStrategyPanel from './components/AIStrategyPanel';
+import Leaderboard from './components/Leaderboard';
+import './App.css';
+
+// Game configuration
+const GAME_CONFIG = {
+  SOLANA_NETWORK: 'devnet',
+  SOLANA_RPC_URL: 'https://api.devnet.solana.com',
+  PROGRAM_ID: 'AiCity1111111111111111111111111111111111111',
+  INITIAL_GOLD: 1000,
+  INITIAL_POPULATION: 100,
+};
+
+interface City {
+  name: string;
+  level: number;
+  population: number;
+  resources: {
+    gold: number;
+    wood: number;
+    stone: number;
+    food: number;
+    energy: number;
+  };
+  buildings: Building[];
+  aiLevel: number;
+  strategy: string;
+  score: number;
+}
+
+interface Building {
+  id: string;
+  type: string;
+  level: number;
+  position: { x: number; y: number };
+  production: { type: string; amount: number };
+}
+
+interface ResourceRates {
+  gold: number;
+  wood: number;
+  stone: number;
+  food: number;
+  energy: number;
+}
+
+const App: React.FC = () => {
+  const { connected, publicKey } = useWallet();
+  const [city, setCity] = useState<City | null>(null);
+  const [resources, setResources] = useState<ResourceRates>({
+    gold: 1000,
+    wood: 500,
+    stone: 250,
+    food: 1000,
+    energy: 500,
+  });
+  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'build' | 'ai' | 'trade' | 'leaderboard'>('build');
+  const [gameCycle, setGameCycle] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Initialize city data
+  const initializeCity = useCallback(async () => {
+    if (!connected || !publicKey) return;
+    
+    setIsLoading(true);
+    try {
+      // Simulated city initialization
+      const newCity: City = {
+        name: 'My City',
+        level: 1,
+        population: 100,
+        resources: {
+          gold: 1000,
+          wood: 500,
+          stone: 250,
+          food: 1000,
+          energy: 500,
+        },
+        buildings: [],
+        aiLevel: 1,
+        strategy: 'Balanced',
+        score: 100,
+      };
+      
+      setCity(newCity);
+      setResources(newCity.resources);
+      setGameCycle(0);
+    } catch (err) {
+      setError('Failed to initialize city');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [connected, publicKey]);
+
+  // Build a new structure
+  const buildStructure = async (buildingType: string, position: { x: number; y: number }) => {
+    if (!city) return;
+    
+    setIsLoading(true);
+    try {
+      const buildingCosts = {
+        house: { gold: 100, wood: 50, stone: 25 },
+        farm: { gold: 50, wood: 100, stone: 0 },
+        mine: { gold: 200, wood: 50, stone: 100 },
+        lumber_mill: { gold: 100, wood: 50, stone: 25 },
+        power_plant: { gold: 300, wood: 100, stone: 150 },
+        factory: { gold: 500, wood: 250, stone: 200 },
+      };
+      
+      const cost = buildingCosts[buildingType as keyof typeof buildingCosts];
+      
+      if (resources.gold < cost.gold || 
+          resources.wood < cost.wood || 
+          resources.stone < cost.stone) {
+        throw new Error('Insufficient resources');
+      }
+      
+      const newBuilding: Building = {
+        id: `building_${Date.now()}`,
+        type: buildingType,
+        level: 1,
+        position,
+        production: { type: 'gold', amount: 10 },
+      };
+      
+      // Update resources
+      const newResources = {
+        ...resources,
+        gold: resources.gold - cost.gold,
+        wood: resources.wood - cost.wood,
+        stone: resources.stone - cost.stone,
+      };
+      
+      // Update city
+      const updatedCity = {
+        ...city,
+        buildings: [...city.buildings, newBuilding],
+        population: city.population + 50,
+        score: city.score + 10,
+      };
+      
+      setCity(updatedCity);
+      setResources(newResources);
+      setSelectedBuilding(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Build failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Game tick - processes one cycle
+  const processGameTick = useCallback(() => {
+    if (!city) return;
+    
+    let production = {
+      gold: 0,
+      wood: 0,
+      stone: 0,
+      food: 0,
+      energy: 0,
+    };
+    
+    // Calculate production from buildings
+    city.buildings.forEach(building => {
+      const aiBonus = 1 + (city.aiLevel * 0.1);
+      
+      switch (building.type) {
+        case 'house':
+          production.population += 5;
+          break;
+        case 'farm':
+          production.food += Math.floor(10 * aiBonus);
+          break;
+        case 'mine':
+          production.gold += Math.floor(5 * aiBonus);
+          production.stone += Math.floor(10 * aiBonus);
+          break;
+        case 'lumber_mill':
+          production.wood += Math.floor(15 * aiBonus);
+          break;
+        case 'power_plant':
+          production.energy += Math.floor(20 * aiBonus);
+          break;
+        case 'factory':
+          production.gold += Math.floor(15 * aiBonus);
+          production.energy -= 5;
+          break;
+      }
+    });
+    
+    // Population growth
+    const populationGrowth = Math.floor(city.population * 0.05);
+    
+    // Update resources
+    const newResources = {
+      gold: resources.gold + production.gold,
+      wood: resources.wood + production.wood,
+      stone: resources.stone + production.stone,
+      food: Math.max(0, resources.food + production.food - Math.floor(city.population * 0.1)),
+      energy: resources.energy + production.energy,
+    };
+    
+    // Update city
+    const updatedCity = {
+      ...city,
+      population: city.population + populationGrowth,
+      score: city.score + Math.floor(production.gold / 10),
+    };
+    
+    setCity(updatedCity);
+    setResources(newResources);
+    setGameCycle(prev => prev + 1);
+  }, [city, resources]);
+
+  // Auto-tick every 5 seconds
+  useEffect(() => {
+    if (!connected) return;
+    
+    const interval = setInterval(processGameTick, 5000);
+    return () => clearInterval(interval);
+  }, [connected, processGameTick]);
+
+  // Initialize on connection
+  useEffect(() => {
+    if (connected && !city) {
+      initializeCity();
+    }
+  }, [connected, city, initializeCity]);
+
+  return (
+    <div className="game-container">
+      {/* Header */}
+      <header className="game-header">
+        <h1>🏙️ Solana AI City</h1>
+        <div className="header-stats">
+          <span>Cycle: {gameCycle}</span>
+          <span>Score: {city?.score || 0}</span>
+          <WalletMultiButton />
+        </div>
+      </header>
+      
+      {/* Resource Bar */}
+      <ResourceBar resources={resources} population={city?.population || 0} />
+      
+      {/* Main Game Area */}
+      <main className="game-main">
+        {!connected ? (
+          <div className="connect-prompt">
+            <h2>🏙️ Welcome to Solana AI City</h2>
+            <p>Connect your wallet to start building your AI-powered city!</p>
+            <WalletMultiButton>Connect Wallet</WalletMultiButton>
+          </div>
+        ) : (
+          <>
+            {/* Game Map */}
+            <GameMap 
+              buildings={city?.buildings || []}
+              onBuild={buildStructure}
+              selectedBuilding={selectedBuilding}
+            />
+            
+            {/* Side Panel */}
+            <aside className="game-sidebar">
+              <CityPanel 
+                city={city}
+                onLevelUp={() => console.log('Level up')}
+              />
+              
+              {/* Navigation Tabs */}
+              <nav className="sidebar-tabs">
+                <button 
+                  className={activeTab === 'build' ? 'active' : ''}
+                  onClick={() => setActiveTab('build')}
+                >
+                  🏗️ Build
+                </button>
+                <button 
+                  className={activeTab === 'ai' ? 'active' : ''}
+                  onClick={() => setActiveTab('ai')}
+                >
+                  🤖 AI
+                </button>
+                <button 
+                  className={activeTab === 'trade' ? 'active' : ''}
+                  onClick={() => setActiveTab('trade')}
+                >
+                  💰 Trade
+                </button>
+                <button 
+                  className={activeTab === 'leaderboard' ? 'active' : ''}
+                  onClick={() => setActiveTab('leaderboard')}
+                >
+                  🏆 Rank
+                </button>
+              </nav>
+              
+              {/* Tab Content */}
+              <div className="tab-content">
+                {activeTab === 'build' && (
+                  <BuildingMenu 
+                    resources={resources}
+                    onSelectBuilding={setSelectedBuilding}
+                    onBuild={buildStructure}
+                    isLoading={isLoading}
+                  />
+                )}
+                
+                {activeTab === 'ai' && (
+                  <AIStrategyPanel 
+                    city={city}
+                    onUpdateStrategy={(level, strategy) => {
+                      if (city) {
+                        setCity({ ...city, aiLevel: level, strategy });
+                      }
+                    }}
+                  />
+                )}
+                
+                {activeTab === 'trade' && (
+                  <TradePanel 
+                    resources={resources}
+                    onTrade={(from, to, amount) => {
+                      console.log('Trade:', from, to, amount);
+                    }}
+                  />
+                )}
+                
+                {activeTab === 'leaderboard' && (
+                  <Leaderboard 
+                    cities={[
+                      { name: 'CryptoKing', score: 15420 },
+                      { name: 'SolanaCity', score: 12850 },
+                      { name: 'AI Metropolis', score: 11200 },
+                      { name: 'Your City', score: city?.score || 0 },
+                    ]}
+                  />
+                )}
+              </div>
+            </aside>
+          </>
+        )}
+      </main>
+      
+      {/* Error Toast */}
+      {error && (
+        <div className="error-toast" onClick={() => setError(null)}>
+          ❌ {error}
+        </div>
+      )}
+      
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+          <p>Processing...</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;

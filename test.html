@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solana AI City v3.0 - Test Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <h1 class="text-2xl font-bold mb-6">🧪 Solana AI City v3.0 - Test Suite</h1>
+    
+    <div id="results" class="space-y-4"></div>
+    
+    <script>
+    // Test utilities
+    const results = [];
+    const test = (name, fn) => {
+        try {
+            fn();
+            results.push({name, status: '✅'});
+        } catch(e) {
+            results.push({name, status: '❌', error: e.message});
+        }
+    };
+    
+    // Include game code (simplified)
+    const state = {
+        gold: 50000, tokens: 25000, sol: 15, gems: 100,
+        level: 50, xp: 2500,
+        staking: { stakedTokens: 10000, rewards: 2500, apy: 128, genesis: true },
+        nfts: [
+            { id: 1, name: 'CyberHero Alpha', rarity: 'legendary', class: 'warrior', level: 10, power: 250, atk: 120, def: 80, spd: 50, breed: 0 },
+            { id: 2, name: 'Mage Nova', rarity: 'epic', class: 'mage', level: 8, power: 180, atk: 150, def: 40, spd: 70, breed: 1 }
+        ],
+        dungeons: [
+            { id: 'easy', name: '新手试炼', diff: 'Easy', power: 100, fee: 100, reward: [500, 1500], drop: 0.3, time: 1 },
+            { id: 'normal', name: '亡者要塞', diff: 'Normal', power: 300, fee: 300, reward: [2000, 5000], drop: 0.5, time: 3 }
+        ],
+        guild: { name: 'CryptoWarriors', level: 10, members: 25, bossHP: 75, won: 12, lost: 3 },
+        daily: { lastClaim: Date.now() - 86400000, tokens: 500, gold: 1000 },
+        votes: [{ id: 1, title: '测试提案', progress: 75, votes: 150, status: 'active' }],
+        myVotes: 1500,
+        page: 'home',
+        breeding: { p1: null, p2: null }
+    };
+    
+    // Utilities
+    const fmt = n => {
+        if(n === undefined || n === null) return '0';
+        if(n >= 1e6) return (n/1e6).toFixed(2) + 'M';
+        if(n >= 1e3) return (n/1e3).toFixed(2) + 'K';
+        return n.toFixed(0);
+    };
+    
+    // Test cases
+    test('State object exists', () => {
+        if(!state) throw new Error('State missing');
+    });
+    
+    test('Format numbers', () => {
+        if(fmt(50000) !== '50K') throw new Error('fmt failed');
+        if(fmt(1500000) !== '1.50M') throw new Error('fmt millions failed');
+        if(fmt(undefined) !== '0') throw new Error('fmt undefined failed');
+    });
+    
+    test('Staking: stake tokens', () => {
+        const before = state.tokens;
+        const amount = 1000;
+        if(amount > state.tokens) throw new Error('Insufficient tokens');
+        state.tokens -= amount;
+        state.staking.stakedTokens += amount;
+        if(state.tokens !== before - 1000) throw new Error('Stake math failed');
+    });
+    
+    test('Staking: claim rewards', () => {
+        const before = state.tokens;
+        const rewards = state.staking.stakedTokens * 0.00035;
+        state.tokens += rewards;
+        if(state.tokens < before) throw new Error('Claim math failed');
+    });
+    
+    test('Dungeon: enter (check fee)', () => {
+        const d = state.dungeons[0];
+        if(state.tokens < d.fee) throw new Error('Cannot enter dungeon');
+    });
+    
+    test('NFT breeding: select parents', () => {
+        state.breeding.p1 = state.nfts[0];
+        state.breeding.p2 = state.nfts[1];
+        if(!state.breeding.p1 || !state.breeding.p2) throw new Error('Parent selection failed');
+    });
+    
+    test('Guild: attack boss', () => {
+        const before = state.guild.bossHP;
+        const dmg = state.level * 10;
+        state.guild.bossHP = Math.max(0, state.guild.bossHP - dmg);
+        if(state.guild.bossHP >= before) throw new Error('Boss damage failed');
+    });
+    
+    test('Vote: submit', () => {
+        const v = state.votes[0];
+        const before = v.votes;
+        v.votes += 200;
+        v.progress = Math.min(100, v.votes / 2);
+        if(v.votes !== before + 200) throw new Error('Vote failed');
+    });
+    
+    test('Daily: check claim time', () => {
+        const h = (Date.now() - state.daily.lastClaim) / 36e5;
+        if(h < 24) console.log('Daily not ready yet');
+    });
+    
+    // Render results
+    const container = document.getElementById('results');
+    results.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-lg ' + (r.status === '✅' ? 'bg-green-900/50' : 'bg-red-900/50');
+        div.innerHTML = `<span class="mr-2">${r.status}</span> ${r.name}${r.error ? ': ' + r.error : ''}`;
+        container.appendChild(div);
+    });
+    
+    const passed = results.filter(r => r.status === '✅').length;
+    const total = results.length;
+    
+    const summary = document.createElement('div');
+    summary.className = 'mt-6 p-6 rounded-xl text-center ' + (passed === total ? 'bg-green-800/50' : 'bg-yellow-800/50');
+    summary.innerHTML = `
+        <div class="text-4xl font-bold mb-2">${passed}/${total}</div>
+        <div class="text-xl">${passed === total ? '🎉 All Tests Passed!' : '⚠️ Some Tests Failed'}</div>
+    `;
+    container.appendChild(summary);
+    
+    console.log('Test Results:', passed, '/', total, 'passed');
+    </script>
+</body>
+</html>

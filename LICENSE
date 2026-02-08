@@ -1,0 +1,90 @@
+MIT License
+
+Copyright (c) 2026 Solana AI City Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+### Dependencies
+
+The following open-source libraries are used in this project:
+
+| Package | Version | License |
+|---------|---------|---------|
+| react | ^18.2.0 | MIT |
+| react-dom | ^18.2.0 | MIT |
+| @solana/web3.js | ^1.87.0 | MIT |
+| @solana/wallet-adapter-react | ^0.15.35 | MIT |
+| @metaplex-foundation/umi | ^0.9.1 | MIT |
+| @metaplex-foundation/mpl-token-metadata | ^2.13.0 | MIT |
+| framer-motion | ^10.16.4 | MIT |
+| @tanstack/react-query | ^5.8.4 | MIT |
+| zustand | ^4.4.7 | MIT |
+| axios | ^1.6.2 | MIT |
+| clsx | ^2.0.0 | MIT |
+| tailwind-merge | ^2.0.0 | MIT |
+| @headlessui/react | ^1.7.17 | MIT |
+| @heroicons/react | ^2.0.18 | MIT |
+| @testing-library/react | ^14.1.0 | MIT |
+| vite | ^5.0.0 | MIT |
+| typescript | ^5.3.0 | Apache-2.0 |
+| eslint | ^8.54.0 | MIT |
+
+---
+
+## Disclaimer
+
+This project is for educational and demonstration purposes only.
+Cryptocurrency and blockchain transactions involve risk. The authors
+are not responsible for any financial losses incurred through the use
+of this software.
+
+Always:
+- ✅ Test on testnet/devnet first
+- ✅ Review smart contract code before deploying
+- ✅ Use small amounts when testing
+- ✅ Keep your private keys secure
+- ✅ Never share your seed phrase
+
+---
+
+## Attribution
+
+If you use this code in your project, please consider:
+
+1. Adding a link to this repository
+2. Mentioning the authors (xixih6863-ctrl / summer8)
+3. Star the original repository
+
+We appreciate attribution but it's not required under the MIT license.
+
+---
+
+## Contact
+
+- **GitHub**: https://github.com/xixih6863-ctrl/solana-ai-city
+- **Issues**: https://github.com/xixih6863-ctrl/solana-ai-city/issues
+- **Discussions**: https://github.com/xixih6863-ctrl/solana-ai-city/discussions
+
+---
+
+*This license was generated on 2026-02-07*

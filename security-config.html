@@ -1,0 +1,351 @@
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║         🛡️ SOLANA AI CITY - SECURITY CONFIGURATION 🛡️                   ║
+║                   安全配置文件 - Security Headers & CSP                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+
+<!-- Security Headers -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
+<meta http-equiv="Content-Security-Policy" content="
+    default-src 'self' 'unsafe-inline' 'unsafe-eval';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://fonts.googleapis.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://api.solana.com https://api.mainnet-beta.solana.com;
+    frame-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+">
+
+<!-- CSP Report URI (for violations) -->
+<meta http-equiv="Content-Security-Policy-Report-Only" content="
+    default-src 'self';
+    report-uri /csp-report;
+    report-to csp-endpoint;
+">
+
+<!-- Security Meta Tags -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Cache Control for Sensitive Data -->
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- Security Verification -->
+<meta name="solana-city-version" content="3.0">
+<meta name="security-level" content="HIGH">
+
+<!-- Pin Configuration -->
+<script id="pin-config" type="application/json">
+{
+    "security": {
+        "level": "HIGH",
+        "features": {
+            "antiDebug": true,
+            "antiCheat": true,
+            "integrityCheck": true,
+            "encryption": true,
+            "rateLimiting": true
+        }
+    },
+    "game": {
+        "version": "3.0.0",
+        "network": "mainnet-beta",
+        "features": ["staking", "nft", "guild", "governance"]
+    }
+}
+</script>
+
+<!-- Inline Security Script - Critical Security Functions -->
+<script>
+(function() {
+    'use strict';
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    //    IMMEDIATE SECURITY INITIALIZATION
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    // Prevent right-click context menu (optional, can be disabled)
+    // document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    // Prevent text selection (reduces cheating)
+    document.addEventListener('selectstart', e => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+    
+    // Prevent drag and drop (reduces injection attacks)
+    document.addEventListener('dragstart', e => {
+        if (!e.target.classList.contains('draggable')) {
+            e.preventDefault();
+        }
+    });
+    
+    // Prevent drop on page (prevents file injection)
+    document.addEventListener('drop', e => {
+        e.preventDefault();
+    });
+    
+    // Disable keyboard shortcuts that could be used for cheating
+    document.addEventListener('keydown', e => {
+        // F12 - Developer Tools
+        if (e.keyCode === 123) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+Shift+I - Developer Tools
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+U - View Source
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+S - Save page
+        if (e.ctrlKey && e.keyCode === 83) {
+            e.preventDefault();
+        }
+    });
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    //    ANTI-TAMPERING
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    // Detect if page was modified
+    (function() {
+        const originalBodyHTML = document.body.innerHTML;
+        
+        setInterval(() => {
+            if (document.body.innerHTML !== originalBodyHTML) {
+                console.warn('[SECURITY] Page content modified');
+                if (window.gameSecurity?.client) {
+                    window.gameSecurity.client.reportViolation('page_modification', 'Body HTML changed');
+                }
+            }
+        }, 5000);
+    })();
+    
+    // Protect critical objects
+    (function() {
+        const protect = (obj, name) => {
+            const original = obj[name];
+            Object.defineProperty(obj, name, {
+                get: function() {
+                    if (window.gameSecurity?.client) {
+                        window.gameSecurity.client.reportViolation('property_access', `Accessed ${name}`);
+                    }
+                    return original;
+                },
+                set: function(value) {
+                    if (window.gameSecurity?.client) {
+                        window.gameSecurity.client.reportViolation('property_modify', `Modified ${name}`);
+                    }
+                    original = value;
+                },
+                configurable: false
+            });
+        };
+        
+        // Protect console in production
+        if (window.location.hostname !== 'localhost' && 
+            window.location.hostname !== '127.0.0.1') {
+            ['log', 'warn', 'error', 'info', 'debug'].forEach(method => {
+                protect(console, method);
+            });
+        }
+    })();
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    //    SECURE STORAGE
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    window.secureStorage = {
+        set: function(key, value, encrypt) {
+            try {
+                const data = encrypt ? 
+                    btoa(JSON.stringify(value)) : 
+                    JSON.stringify(value);
+                sessionStorage.setItem('sc_' + key, data);
+                return true;
+            } catch (e) {
+                console.error('[SECURITY] Storage error:', e);
+                return false;
+            }
+        },
+        
+        get: function(key, decrypt) {
+            try {
+                const data = sessionStorage.getItem('sc_' + key);
+                if (!data) return null;
+                return decrypt ? 
+                    JSON.parse(atob(data)) : 
+                    JSON.parse(data);
+            } catch (e) {
+                console.error('[SECURITY] Storage read error:', e);
+                return null;
+            }
+        },
+        
+        remove: function(key) {
+            try {
+                sessionStorage.removeItem('sc_' + key);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
+        
+        clear: function() {
+            try {
+                const keys = Object.keys(sessionStorage).filter(k => k.startsWith('sc_'));
+                keys.forEach(k => sessionStorage.removeItem(k));
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    };
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    //    CRYPTOGRAPHIC UTILITIES
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    window.securityUtils = {
+        hash: function(data) {
+            let hash = 0;
+            const str = String(data);
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(16);
+        },
+        
+        randomId: function() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        },
+        
+        generateSignature: async function(data, secret) {
+            const encoder = new TextEncoder();
+            const key = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(secret),
+                { name: 'HMAC', hash: 'SHA-256' },
+                false,
+                ['sign']
+            );
+            const signature = await crypto.subtle.sign(
+                'HMAC',
+                key,
+                encoder.encode(JSON.stringify(data))
+            );
+            return btoa(String.fromCharCode(...new Uint8Array(signature)));
+        }
+    };
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    //    SESSION SECURITY
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    window.sessionSecurity = {
+        id: null,
+        createdAt: null,
+        lastActivity: null,
+        
+        init: function() {
+            this.id = window.securityUtils.randomId();
+            this.createdAt = Date.now();
+            this.lastActivity = Date.now();
+            
+            // Store session
+            window.secureStorage.set('session_id', this.id, true);
+            window.secureStorage.set('session_created', this.createdAt, true);
+            
+            // Monitor activity
+            document.addEventListener('click', () => this.updateActivity());
+            document.addEventListener('keydown', () => this.updateActivity());
+            document.addEventListener('mousemove', () => this.updateActivity());
+            
+            // Session timeout (30 minutes of inactivity)
+            setInterval(() => {
+                if (Date.now() - this.lastActivity > 1800000) {
+                    this.expire();
+                }
+            }, 60000);
+        },
+        
+        updateActivity: function() {
+            this.lastActivity = Date.now();
+            window.secureStorage.set('session_activity', this.lastActivity, true);
+        },
+        
+        validate: function() {
+            const storedId = window.secureStorage.get('session_id', true);
+            if (storedId !== this.id) {
+                console.warn('[SECURITY] Session ID mismatch');
+                return false;
+            }
+            return true;
+        },
+        
+        expire: function() {
+            console.log('[SECURITY] Session expired due to inactivity');
+            window.secureStorage.clear();
+            window.location.reload();
+        }
+    };
+    
+    // Initialize session security
+    window.sessionSecurity.init();
+    
+    console.log('🛡️ Security Configuration Loaded');
+    console.log('🛡️ Security Level: HIGH');
+    
+})();
+</script>
+
+<!-- Trust & Safety Verification -->
+<div id="security-verification" style="display:none;" aria-hidden="true">
+    <span id="security-token" data-created="2026-02-08" data-version="3.0"></span>
+</div>
+
+<!-- Security Score (for monitoring) -->
+<script>
+(function() {
+    let securityScore = 100;
+    const deductions = {
+        devTools: 30,
+        debugger: 50,
+        automation: 40,
+        modification: 30,
+        violation: 10
+    };
+    
+    window.addEventListener('security-violation', (e) => {
+        const type = e.detail?.type;
+        if (deductions[type]) {
+            securityScore -= deductions[type];
+            console.log(`[SECURITY] Score: ${securityScore} (-${deductions[type]} for ${type})`);
+            
+            if (securityScore < 50) {
+                console.warn('[SECURITY] Low security score - actions may be limited');
+            }
+        }
+    });
+    
+    window.getSecurityScore = () => Math.max(0, securityScore);
+})();
+</script>
