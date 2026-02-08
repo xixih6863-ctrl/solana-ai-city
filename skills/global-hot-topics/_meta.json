@@ -1,0 +1,46 @@
+{
+  "name": "global-hot-topics",
+  "version": "1.0.0",
+  "description": "AI-powered global hot topic tracking and aggregation system for autonomous AI agents",
+  "author": "SolanaAICity",
+  "keywords": [
+    "trending",
+    "hot-topics",
+    "news",
+    "social-media",
+    "market-intelligence",
+    "trend-analysis",
+    "aggregation",
+    "monitoring",
+    "sentiment",
+    "trading"
+  ],
+  "repository": "https://github.com/xixih6863-ctrl/solana-city",
+  "license": "MIT",
+  "price": 19,
+  "scripts": [
+    {
+      "name": "hot-topics",
+      "script": "scripts/hot_topics.py"
+    },
+    {
+      "name": "track",
+      "script": "scripts/track.py"
+    },
+    {
+      "name": "analyze",
+      "script": "scripts/analyze.py"
+    },
+    {
+      "name": "report",
+      "script": "scripts/report.py"
+    },
+    {
+      "name": "dashboard",
+      "script": "scripts/dashboard.py"
+    }
+  ],
+  "engines": {
+    "python": ">=3.9"
+  }
+}

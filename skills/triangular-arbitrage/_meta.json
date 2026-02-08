@@ -1,0 +1,34 @@
+{
+  "name": "triangular-arbitrage",
+  "version": "1.0.0",
+  "description": "Triangular arbitrage detection and execution for Solana DeFi markets",
+  "author": "SolanaAICity",
+  "keywords": [
+    "solana",
+    "arbitrage",
+    "defi",
+    "trading",
+    "raydium",
+    "orca",
+    "jupiter",
+    "triangular",
+    "trading-bot"
+  ],
+  "repository": "https://github.com/xixih6863-ctrl/solana-city",
+  "license": "MIT",
+  "price": 49,
+  "scripts": [
+    {
+      "name": "scan",
+      "script": "scripts/scan.py"
+    },
+    {
+      "name": "execute",
+      "script": "scripts/execute.py"
+    },
+    {
+      "name": "analyze",
+      "script": "scripts/analyze.py"
+    }
+  ]
+}
