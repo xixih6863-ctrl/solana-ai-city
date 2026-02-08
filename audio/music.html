@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Solana AI City Background Music</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); min-height: 100vh; color: white; padding: 40px 20px; }
+        .gradient-text { background: linear-gradient(135deg, #14f195, #9945ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .music-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+        .volume-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); outline: none; }
+        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #14f195; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-2 gradient-text">🎵 Background Music</h1>
+        <p class="text-center text-gray-400 mb-8">Epic sounds for your city-building adventure</p>
+        
+        <!-- Music Player -->
+        <div class="music-card">
+            <h3 class="text-xl font-bold mb-4">🎮 Game Soundtrack</h3>
+            <p class="text-gray-400 text-sm mb-4">Background music placeholder</p>
+            
+            <audio id="bgm" class="w-full" controls loop>
+                <source src="" type="audio/mpeg">
+            </audio>
+            
+            <div class="mt-4">
+                <label class="text-sm text-gray-400">🔊 Volume</label>
+                <input type="range" class="volume-slider" min="0" max="100" value="50" onchange="document.getElementById('bgm').volume = this.value/100">
+            </div>
+        </div>
+        
+        <!-- Music Sources -->
+        <div class="music-card">
+            <h3 class="text-xl font-bold mb-4">📥 Get Free Game Music</h3>
+            <div class="space-y-3">
+                <a href="https://pixabay.com/music/" target="_blank" class="block p-3 bg-purple-600 hover:bg-purple-700 rounded-lg text-center transition">
+                    🎵 Pixabay Music - Free & Royalty-free
+                </a>
+                <a href="https://incompetech.com/" target="_blank" class="block p-3 bg-green-600 hover:bg-green-700 rounded-lg text-center transition">
+                    🎼 Incompetech - Kevin MacLeod
+                </a>
+                <a href="https://www.youtube.com/audiolibrary/music" target="_blank" class="block p-3 bg-red-600 hover:bg-red-700 rounded-lg text-center transition">
+                    ▶️ YouTube Audio Library
+                </a>
+            </div>
+        </div>
+        
+        <!-- AI Music Generators -->
+        <div class="music-card">
+            <h3 class="text-xl font-bold mb-4">🤖 AI Music Generators</h3>
+            <div class="space-y-3">
+                <a href="https://suno.ai" target="_blank" class="block p-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-center transition">
+                    ☀️ Suno AI - Custom game music
+                </a>
+                <a href="https://udio.com" target="_blank" class="block p-3 bg-pink-600 hover:bg-pink-700 rounded-lg text-center transition">
+                    🎵 Udio - AI music creation
+                </a>
+            </div>
+            <p class="text-gray-400 text-sm mt-4">
+                💡 Prompt example: "Epic city building game soundtrack, adventure, orchestral, loop"
+            </p>
+        </div>
+        
+        <!-- Upload Section -->
+        <div class="music-card">
+            <h3 class="text-xl font-bold mb-4">📤 Add Your Music</h3>
+            <p class="text-gray-400 text-sm mb-4">
+                Download music and add to: <code>audio/music/</code>
+            </p>
+            <div class="bg-black/30 p-4 rounded-lg">
+                <p class="text-green-400">1. Download music from Pixabay or AI generator</p>
+                <p class="text-green-400">2. Save to: audio/music/your-music.mp3</p>
+                <p class="text-green-400">3. Update index.html with your file</p>
+            </div>
+        </div>
+        
+        <!-- Back -->
+        <div class="text-center mt-8">
+            <a href="index.html" class="inline-block bg-gradient-to-r from-purple-500 to-green-400 px-6 py-3 rounded-lg font-bold">
+                ← Back to Game
+            </a>
+        </div>
+    </div>
+</body>
+</html>
