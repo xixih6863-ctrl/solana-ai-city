@@ -2,15 +2,15 @@
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/xixih6863-ctrl/solana-ai-city)](https://github.com/xixih6863-ctrl/solana-ai-city/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/xixih6863-ctrl/solana-city)](https://github.com/xixih6863-ctrl/solana-city/stargazers)
 [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-red?logo=github)](https://github.com/sponsors/xixih6863-ctrl)
-[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/xixih6863-ctrl/solana-ai-city/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/xixih6863-ctrl/solana-city/blob/main/LICENSE)
 
 **AI-Powered Web3 City Building Game on Solana**
 
-[Website](https://xixih6863-ctrl.github.io/solana-ai-city) • 
+[Website](https://xixih6863-ctrl.github.io/solana-city) • 
 [Docs](README.md) • 
-[Download](https://github.com/xixih6863-ctrl/solana-ai-city/archive/main.zip)
+[Download](https://github.com/xixih6863-ctrl/solana-city/archive/main.zip)
 
 </div>
 
@@ -20,8 +20,8 @@
 
 ```bash
 # Clone
-git clone https://github.com/xixih6863-ctrl/solana-ai-city.git
-cd solana-ai-city
+git clone https://github.com/xixih6863-ctrl/solana-city.git
+cd solana-city
 
 # Frontend
 cd frontend
@@ -60,7 +60,7 @@ If you find this helpful, please consider:
 
 - ⭐ **Starring** the repo
 - 💝 **[GitHub Sponsors](https://github.com/sponsors/xixih6863-ctrl)**
-- 🛒 **[Buy on Gumroad](https://gumroad.com/l/solana-ai-city)**
+- 🛒 **[Buy on Gumroad](https://gumroad.com/l/solana-city)**
 
 ---
 
