@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏙️ Solana AI City v4.0 Ultimate Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #00d4ff;
+            --secondary: #00ff88;
+            --accent: #ff0066;
+            --warning: #ffaa00;
+            --bg-dark: #0a0a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a0a2e 50%, #0f3460 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        
+        header h1 {
+            font-size: 52px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        header p {
+            color: var(--text-dim);
+            font-size: 18px;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #ff6600);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .resources-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+        
+        .resource-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            min-width: 140px;
+        }
+        
+        .resource-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        
+        .resource-name {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        
+        .resource-value {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--primary);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-success { background: linear-gradient(135deg, var(--secondary), #00cc6a); color: white; }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #ff8800); color: white; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #0099cc); color: white; }
+        .btn-accent { background: linear-gradient(135deg, var(--accent), #cc0052); color: white; }
+        
+        .trading-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .trading-stat {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .trading-stat-label { font-size: 11px; color: var(--text-dim); margin-bottom: 5px; }
+        .trading-stat-value { font-size: 20px; font-weight: bold; }
+        .positive { color: var(--secondary); }
+        .negative { color: var(--accent); }
+        
+        .prediction-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .prediction-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .prediction-btn.yes {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--secondary);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+        
+        .prediction-btn.no {
+            background: rgba(255, 0, 102, 0.2);
+            color: var(--accent);
+            border: 1px solid rgba(255, 0, 102, 0.3);
+        }
+        
+        .prediction-odds { display: flex; gap: 10px; margin-top: 10px; }
+        .prediction-bar { height: 8px; background: rgba(0, 0, 0, 0.3); border-radius: 4px; margin-top: 10px; overflow: hidden; }
+        .prediction-fill.yes { height: 100%; background: linear-gradient(90deg, var(--secondary), #00ffaa); }
+        
+        .market-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+        .market-change.up { background: rgba(0, 255, 136, 0.2); color: var(--secondary); padding: 2px 8px; border-radius: 8px; font-size: 12px; }
+        .market-change.down { background: rgba(255, 0, 102, 0.2); color: var(--accent); padding: 2px 8px; border-radius: 8px; font-size: 12px; }
+        
+        .buildings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .building-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .building-card:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .building-icon { font-size: 36px; margin-bottom: 8px; }
+        .building-name { font-size: 12px; margin-bottom: 5px; }
+        .building-level { font-size: 10px; background: rgba(0, 212, 255, 0.15); padding: 2px 8px; border-radius: 8px; color: var(--primary); }
+        
+        .ai-chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        
+        .ai-chat-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            box-shadow: 0 5px 30px rgba(0, 212, 255, 0.4);
+        }
+        
+        .ai-chat-window {
+            position: absolute;
+            bottom: 90px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .ai-chat-window.active { display: flex; }
+        
+        .chat-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        
+        .message.ai {
+            background: rgba(0, 212, 255, 0.15);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.user {
+            background: linear-gradient(135deg, var(--accent), #cc0052);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        
+        .chat-send {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            cursor: pointer;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            color: var(--text-dim);
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 32px; }
+            .main-grid { grid-template-columns: 1fr; }
+            .ai-chat-window { width: calc(100vw - 40px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏙️ Solana AI City v4.0</h1>
+            <p>AI-Powered Web3 City Building Game</p>
+            <span class="version-badge">🚀 v4.0 Ultimate Edition</span>
+        </header>
+        
+        <div class="resources-bar">
+            <div class="resource-item">
+                <div class="resource-icon">⚡</div>
+                <div class="resource-name">Energy</div>
+                <div class="resource-value" id="energy">1,250</div>
+            </div>
+            <div class="resource-item">
+                <div class="resource-icon">🪙</div>
+                <div class="resource-name">Gold</div>
+                <div class="resource-value" id="gold">25,000</div>
+            </div>
+            <div class="resource-item">
+                <div class="resource-icon">💵</div>
+                <div class="resource-name">USDC</div>
+                <div class="resource-value" id="usdc">$5,420</div>
+            </div>
+            <div class="resource-item">
+                <div class="resource-icon">⭐</div>
+                <div class="resource-name">Reputation</div>
+                <div class="resource-value" id="reputation">2,850</div>
+            </div>
+            <div class="resource-item">
+                <div class="resource-icon">🏆</div>
+                <div class="resource-name">SOL</div>
+                <div class="resource-value" id="sol">12.5</div>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <!-- AI Trading Bot -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>🤖</span>AI Trading Bot</h2>
+                    <span class="card-badge">🟢 Active</span>
+                </div>
+                <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 20px;">
+                    Automated DeFi trading with AI-powered strategies.
+                </p>
+                <div class="trading-panel">
+                    <div class="trading-stat">
+                        <div class="trading-stat-label">Portfolio Value</div>
+                        <div class="trading-stat-value positive">$15,420</div>
+                    </div>
+                    <div class="trading-stat">
+                        <div class="trading-stat-label">Today's PnL</div>
+                        <div class="trading-stat-value positive">+$892 (+6.2%)</div>
+                    </div>
+                    <div class="trading-stat">
+                        <div class="trading-stat-label">Win Rate</div>
+                        <div class="trading-stat-value">72.5%</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-success" onclick="startTrading()">▶️ Start Bot</button>
+                    <button class="btn btn-warning" onclick="viewStrategies()">📊 Strategies</button>
+                    <button class="btn btn-primary" onclick="viewPortfolio()">💼 Portfolio</button>
+                </div>
+            </div>
+            
+            <!-- Prediction Markets -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>🎯</span>Prediction Markets</h2>
+                    <span class="card-badge">🔥 Hot</span>
+                </div>
+                <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 20px;">
+                    Bet on future events with AI-powered predictions.
+                </p>
+                <div class="prediction-item">
+                    <div>Will SOL reach $200 by Q2 2026?</div>
+                    <div class="prediction-odds">
+                        <button class="prediction-btn yes">YES 65%</button>
+                        <button class="prediction-btn no">NO 35%</button>
+                    </div>
+                    <div class="prediction-bar"><div class="prediction-fill yes" style="width: 65%;"></div></div>
+                </div>
+                <div class="prediction-item">
+                    <div>Will BTC hit $100K in 2026?</div>
+                    <div class="prediction-odds">
+                        <button class="prediction-btn yes">YES 42%</button>
+                        <button class="prediction-btn no">NO 58%</button>
+                    </div>
+                    <div class="prediction-bar"><div class="prediction-fill yes" style="width: 42%;"></div></div>
+                </div>
+            </div>
+            
+            <!-- Live Markets -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>📈</span>Live Markets</h2>
+                    <span class="card-badge" style="animation: pulse 2s infinite;">🔴 Live</span>
+                </div>
+                <div class="market-grid">
+                    <div class="market-item"><span>SOL</span><span>$98.52</span><span class="market-change up">+5.2%</span></div>
+                    <div class="market-item"><span>BTC</span><span>$43,250</span><span class="market-change up">+3.8%</span></div>
+                    <div class="market-item"><span>ETH</span><span>$2,280</span><span class="market-change down">-1.2%</span></div>
+                    <div class="market-item"><span>RAY</span><span>$3.25</span><span class="market-change up">+8.5%</span></div>
+                </div>
+            </div>
+            
+            <!-- Buildings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>🏗️</span>Your City</h2>
+                    <span class="card-badge">Lv. 12</span>
+                </div>
+                <div class="buildings-grid">
+                    <div class="building-card"><div class="building-icon">🏠</div><div class="building-name">Residential</div><div class="building-level">Lv. 8</div></div>
+                    <div class="building-card"><div class="building-icon">🏢</div><div class="building-name">Commercial</div><div class="building-level">Lv. 5</div></div>
+                    <div class="building-card"><div class="building-icon">🏭</div><div class="building-name">Industrial</div><div class="building-level">Lv. 3</div></div>
+                    <div class="building-card"><div class="building-icon">🔬</div><div class="building-name">Research</div><div class="building-level">Lv. 7</div></div>
+                    <div class="building-card"><div class="building-icon">🎰</div><div class="building-name">Casino</div><div class="building-level">Lv. 4</div></div>
+                    <div class="building-card"><div class="building-icon">🏦</div><div class="building-name">Bank</div><div class="building-level">Lv. 6</div></div>
+                    <div class="building-card"><div class="building-icon">🎨</div><div class="building-name">Art Gallery</div><div class="building-level">Lv. 2</div></div>
+                    <div class="building-card"><div class="building-icon">🏥</div><div class="building-name">Hospital</div><div class="building-level">Lv. 5</div></div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>🏙️ Solana AI City v4.0 Ultimate Edition</p>
+            <p style="margin-top: 10px;">
+                Built with ❤️ using AI Skills • Powered by Claude • Solana Blockchain
+            </p>
+        </footer>
+    </div>
+    
+    <!-- AI Chat Widget -->
+    <div class="ai-chat-widget">
+        <div class="ai-chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-avatar">🤖</div>
+                <div><h3>AI Assistant</h3><p>🟢 Online • Powered by Claude</p></div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    👋 Hi! I'm your AI assistant. I can help with:
+                    • 🎮 Game strategy
+                    • 💰 Trading recommendations
+                    • 📊 Portfolio analysis
+                    • 🎯 Event predictions
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything...">
+                <button class="chat-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+        <button class="ai-chat-button" onclick="toggleChat()">🤖</button>
+    </div>
+    
+    <script>
+        // AI Trading Bot
+        let tradingActive = false;
+        
+        function startTrading() {
+            tradingActive = !tradingActive;
+            alert(tradingActive ? '🤖 AI Trading Bot Started!' : '🛑 AI Trading Bot Stopped!');
+        }
+        
+        function viewStrategies() { alert('📊 Strategies: SMA Crossover, RSI, Arbitrage'); }
+        function viewPortfolio() { alert('💼 Portfolio: $15,420 | Win Rate: 72.5%'); }
+        
+        // Chat
+        function toggleChat() {
+            document.getElementById('chatWindow').classList.toggle('active');
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const messages = document.getElementById('chatMessages');
+            messages.innerHTML += `<div class="message user">${message}</div>`;
+            messages.innerHTML += `<div class="message ai">🤖 Analyzing: "${message}"...<br><br>💡 Consider checking current SOL market conditions and your portfolio diversification. Would you like trading recommendations?</div>`;
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
